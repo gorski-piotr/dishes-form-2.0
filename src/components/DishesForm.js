@@ -223,10 +223,9 @@ function DishesForm() {
             name="type"
             id="type"
             onChange={(e) => setType(e.target.value)}
+            value={type ? type : ""}
           >
-            <option value="" defaultValue>
-              Choose a dish type
-            </option>
+            <option hidden>Choose a dish type</option>
             <option value="pizza">Pizza</option>
             <option value="soup">Soup</option>
             <option value="sandwich">Sandwich</option>
