@@ -117,14 +117,34 @@ function DishesForm() {
       .then((resJSON) => {
         if (resJSON.id) {
           //if no errors then reset the form and show the alert with the JSON response
-          console.log(resJSON);
+          console.log("response", resJSON);
           formReset();
           alert(JSON.stringify(resJSON));
         } else {
           alert(`There was an error`);
-          console.log(resJSON);
+          console.log("error", resJSON);
           let error = resJSON;
-          setErrorMessage(JSON.stringify(error));
+
+          if (error.non_field_error) {
+            let errorString = JSON.stringify(error.non_field_error);
+            setErrorMessage(errorString.slice(1, -1));
+          }
+          if (error.no_of_slices) {
+            let errorString = JSON.stringify(error.no_of_slices);
+            setErrorMessage(errorString.slice(1, -1));
+          }
+          if (error.diameter) {
+            let errorString = JSON.stringify(error.diameter);
+            setErrorMessage(errorString.slice(1, -1));
+          }
+          if (error.spiciness_scale) {
+            let errorString = JSON.stringify(error.spiciness_scale);
+            setErrorMessage(errorString.slice(1, -1));
+          }
+          if (error.slices_of_bread) {
+            let errorString = JSON.stringify(error.slices_of_bread);
+            setErrorMessage(errorString.slice(1, -1));
+          }
         }
       })
       .catch((error) => {
