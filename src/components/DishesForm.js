@@ -4,7 +4,7 @@ import NewDish from "./NewDish";
 function DishesForm() {
   // state Hooks for the input fields:
   const [name, setName] = useState("");
-  const [preparation_time, setPreparation_time] = useState("00:00:00");
+  const [preparation_time, setPreparation_time] = useState("");
   const [type, setType] = useState("");
   const [no_of_slices, setNo_of_slices] = useState("");
   const [diameter, setDiameter] = useState("");
@@ -15,6 +15,9 @@ function DishesForm() {
   const [errorMessage, setErrorMessage] = useState("");
 
   //state Hooks for active errors (used for inputs stylinig)
+  const [dishNameErrorActive, setDishNameErrorActive] = useState(false);
+  const [preparation_timeErrorActive, setPreparation_timeErrorActive] =
+    useState(false);
   const [non_field_errorActive, setNon_field_errorActive] = useState(false);
   const [no_of_slicesErrorActive, setNo_of_slicesErrorActive] = useState(false);
   const [diameterErrorActive, setDiameterErrorActive] = useState(false);
@@ -29,7 +32,7 @@ function DishesForm() {
   //form reset function - set all the inputs states to the initial value after submitting the form
   const formReset = () => {
     setName("");
-    setPreparation_time("00:00:00");
+    setPreparation_time("");
     setType("");
     setNo_of_slices("");
     setDiameter("");
@@ -37,11 +40,13 @@ function DishesForm() {
     setSlices_of_bread("");
     setErrorMessage("");
     //input styling reset
-    setNon_field_errorActive(false);
-    setNo_of_slicesErrorActive(false);
-    setDiameterErrorActive(false);
-    setSpiciness_scaleErrorActive(false);
-    setSlices_of_breadErrorActive(false);
+    // setDishNameErrorActive(false);
+    // setPreparation_timeErrorActive(false);
+    // setNon_field_errorActive(false);
+    // setNo_of_slicesErrorActive(false);
+    // setDiameterErrorActive(false);
+    // setSpiciness_scaleErrorActive(false);
+    // setSlices_of_breadErrorActive(false);
   };
 
   // handle form submit button:
@@ -51,11 +56,37 @@ function DishesForm() {
     setNewDish(""); //to clear previous dish
 
     //input styling reset
+    setDishNameErrorActive(false);
+    setPreparation_timeErrorActive(false);
     setNon_field_errorActive(false);
     setNo_of_slicesErrorActive(false);
     setDiameterErrorActive(false);
     setSpiciness_scaleErrorActive(false);
     setSlices_of_breadErrorActive(false);
+
+    let errors = []; //initializing the errors array
+
+    //form validation:
+    if (name.trim() === "") {
+      errors.push("Set the dish name!");
+      setDishNameErrorActive(true);
+    }
+    if (
+      preparation_time.trim() === "00:00:00" ||
+      preparation_time.trim() === ""
+    ) {
+      errors.push("Set the preparation time!");
+      setPreparation_timeErrorActive(true);
+    }
+
+    // mapping through the errors array and setting the error message
+    if (errors.length > 0) {
+      const errorItems = errors.map((element, index) => (
+        <li key={index}>{element}</li>
+      ));
+      setErrorMessage(errorItems);
+      return;
+    }
 
     // create an Object you want to submit (depending on the dish type)
     let dish;
@@ -134,6 +165,11 @@ function DishesForm() {
             setErrorMessage(errorString.slice(1, -1));
             setSlices_of_breadErrorActive(true);
           }
+          if (error.preparation_time) {
+            let errorString = JSON.stringify(error.preparation_time);
+            setErrorMessage(errorString.slice(1, -1));
+            setPreparation_timeErrorActive(true);
+          }
         }
       })
       .catch((error) => {
@@ -148,28 +184,37 @@ function DishesForm() {
         <div className="my-1">
           <label htmlFor="name">Dish name:</label>
           <input
-            className="border-black border rounded p-1 mx-2"
+            className={
+              dishNameErrorActive
+                ? "border-red-500 border-2 rounded p-1 mx-2"
+                : "border-black border rounded p-1 mx-2"
+            }
             type="text"
             name="name"
             id="name"
             placeholder="Dish name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required
           />
         </div>
 
         {/* Time input for preparation time */}
         <div className="my-1">
           <label htmlFor="preparation_time">Preparation time:</label>
-
           <input
-            className="border-black border rounded p-1 mx-2"
+            className={
+              preparation_timeErrorActive
+                ? "border-red-500 border-2 rounded p-1 mx-2"
+                : "border-black border rounded p-1 mx-2"
+            }
             type="time"
             step="1"
             name="preparation_time"
             id="preparation_time"
             value={preparation_time}
             onChange={(e) => setPreparation_time(e.target.value)}
+            required
           />
         </div>
 
