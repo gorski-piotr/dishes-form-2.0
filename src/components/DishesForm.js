@@ -1,4 +1,5 @@
 import { useState } from "react";
+import NewDish from "./NewDish";
 
 function DishesForm() {
   // state Hooks for the input fields:
@@ -22,13 +23,8 @@ function DishesForm() {
   const [slices_of_breadErrorActive, setSlices_of_breadErrorActive] =
     useState(false);
 
-  // console.log("name:", name);
-  // console.log("preparation time", preparation_time);
-  // console.log("type:", type);
-  // console.log("no_of_slices:", no_of_slices);
-  // console.log("diameter:", diameter);
-  // console.log("spiciness:", spiciness_scale);
-  // console.log("slices_of_bread:", slices_of_bread);
+  //state hook for a new dish
+  const [newDish, setNewDish] = useState("");
 
   //form reset function - set all the inputs states to the initial value after submitting the form
   const formReset = () => {
@@ -52,6 +48,7 @@ function DishesForm() {
   const handleSubmit = (e) => {
     e.preventDefault(); //to stop the form submitting prevent from reloading the page
     setErrorMessage(""); //to clear previous error messages
+    setNewDish(""); //to clear previous dish
 
     //input styling reset
     setNon_field_errorActive(false);
@@ -59,43 +56,6 @@ function DishesForm() {
     setDiameterErrorActive(false);
     setSpiciness_scaleErrorActive(false);
     setSlices_of_breadErrorActive(false);
-
-    let errors = []; //initializing the errors array
-
-    //form validation:
-    // if (name.trim() === "") {
-    //   errors.push("Set the dish name!");
-    // }
-    // if (preparation_time.trim() === "00:00:00") {
-    //   errors.push("Set the preparation time!");
-    // }
-    // if (type === "") {
-    //   errors.push("Set the dish type!");
-    // }
-    // if (type === "pizza" && no_of_slices < 1) {
-    //   errors.push("Set the number of pizza slices!");
-    // }
-    // if (type === "pizza" && diameter < 10) {
-    //   errors.push("Set the correct pizza diameter! (Minimum 10cm)");
-    // }
-    // if (type === "soup" && (spiciness_scale > 10 || spiciness_scale < 1)) {
-    //   errors.push("Set the correct spiciness scale! (between 1 and 10)");
-    // }
-    // if (type === "sandwich" && slices_of_bread < 1) {
-    //   errors.push("Set the number of bread slices!");
-    // }
-
-    // mapping through the errors array and setting the error message
-    if (errors.length > 0) {
-      const errorItems = errors.map((element, index) => (
-        <li key={index}>{element}</li>
-      ));
-      setErrorMessage(errorItems);
-      return;
-    }
-
-    // if errors array is empty then show an alert and proceed with form submitting
-    alert("Congratulations! Form submitted!");
 
     // create an Object you want to submit (depending on the dish type)
     let dish;
@@ -140,8 +100,10 @@ function DishesForm() {
         if (resJSON.id) {
           //if no errors then reset the form and show the alert with the JSON response
           console.log("response", resJSON);
+          setNewDish(resJSON);
           formReset();
-          alert(JSON.stringify(resJSON));
+
+          // if there was an error:
         } else {
           alert(`There was an error`);
           console.log("error", resJSON);
@@ -315,9 +277,14 @@ function DishesForm() {
             />
           </div>
         )}
-        <input className="p-2 m-2 rounded" type="submit" value="Submit"></input>
+        <input
+          className="p-2 m-2 rounded cursor-pointer hover:bg-gray-300"
+          type="submit"
+          value="Submit"
+        ></input>
       </form>
       <ul className="text-red-600 font-bold">{errorMessage}</ul>
+      {newDish && <NewDish newDish={newDish} />}
     </div>
   );
 }
