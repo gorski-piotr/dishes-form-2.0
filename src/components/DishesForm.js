@@ -256,6 +256,7 @@ function DishesForm() {
                 id="no_of_slices"
                 name="no_of_slices"
                 min="1"
+                placeholder="Number of slices"
                 onChange={(e) => setNo_of_slices(e.target.value)}
               />
             </div>
@@ -272,6 +273,7 @@ function DishesForm() {
                 id="diameter"
                 name="diameter"
                 min="10"
+                placeholder="Pizza diameter"
                 onChange={(e) => setDiameter(e.target.value)}
               />
             </div>
@@ -318,6 +320,7 @@ function DishesForm() {
               id="slices_of_bread"
               name="slices_of_bread"
               min="1"
+              placeholder="Slices of bread"
               onChange={(e) => setSlices_of_bread(e.target.value)}
             />
           </div>
